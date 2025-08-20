@@ -44,6 +44,11 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "gdcef-artifacts-godot_3-linux_x86_64.tar.gz"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdcef-artifacts-linux
+          path: gdcef-artifacts-godot_3-linux_x86_64.tar.gz 
 
   #############################################################################
   ### Windows
