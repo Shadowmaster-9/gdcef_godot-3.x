@@ -19,10 +19,10 @@ jobs:
   #############################################################################
   build_linux:
     name: Build on Linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout GDCEF
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: godot-3.x
           submodules: true
@@ -48,41 +48,41 @@ jobs:
   #############################################################################
   ### Windows
   #############################################################################
-  build_windows:
-    name: Build on Windows
-    runs-on: windows-2022
-    needs: build_linux
-    steps:
-      # Add path for finding cl.exe
-      # FIXME: I dunno why Godot editor and godot-cpp can find cl.exe while our
-      # godot native modules cannot find it without this extra path
-      - uses: ilammy/msvc-dev-cmd@v1.10.0
+  # build_windows:
+  #   name: Build on Windows
+  #   runs-on: windows-2022
+  #   needs: build_linux
+  #   steps:
+  #     # Add path for finding cl.exe
+  #     # FIXME: I dunno why Godot editor and godot-cpp can find cl.exe while our
+  #     # godot native modules cannot find it without this extra path
+  #     - uses: ilammy/msvc-dev-cmd@v1.10.0
 
-      - name: Checkout GDCEF
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: Install system packages
-        shell: powershell
-        run: |
-          cd addons/gdcef
-          python3 -m pip install -r requirements.txt
-      - name: Compile GDCEF
-        shell: powershell
-        run: |
-          cd addons/gdcef
-          python3 build.py
-      - name: Check build
-        run: |
-          cd build
-          Test-Path -Path \a\gdcef\gdcef\build\gdcefSubProcess.exe
-          Test-Path -Path \a\gdcef\gdcef\build\libgdcef.dll
-          Test-Path -Path \a\gdcef\gdcef\build\libcef.dll
-          cd -
-          tar -czvf gdcef-artifacts-godot_3-windows_x86_64.tar.gz build
-      - name: Do release
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "gdcef-artifacts-godot_3-windows_x86_64.tar.gz"
-          allowUpdates: true
+  #     - name: Checkout GDCEF
+  #       uses: actions/checkout@v4
+  #       with:
+  #         submodules: true
+  #     - name: Install system packages
+  #       shell: powershell
+  #       run: |
+  #         cd addons/gdcef
+  #         python3 -m pip install -r requirements.txt
+  #     - name: Compile GDCEF
+  #       shell: powershell
+  #       run: |
+  #         cd addons/gdcef
+  #         python3 build.py
+  #     - name: Check build
+  #       run: |
+  #         cd build
+  #         Test-Path -Path \a\gdcef\gdcef\build\gdcefSubProcess.exe
+  #         Test-Path -Path \a\gdcef\gdcef\build\libgdcef.dll
+  #         Test-Path -Path \a\gdcef\gdcef\build\libcef.dll
+  #         cd -
+  #         tar -czvf gdcef-artifacts-godot_3-windows_x86_64.tar.gz build
+  #     - name: Do release
+  #       if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: "gdcef-artifacts-godot_3-windows_x86_64.tar.gz"
+  #         allowUpdates: true
