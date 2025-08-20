@@ -2,15 +2,15 @@ name: CI for GDCEF Godot 3.x
 on:
   workflow_dispatch:
     branches:
-      - godot-3.x
+      - main
   push:
     branches:
-      - godot-3.x
+      - main
     tags:
       - '*'
   pull_request:
     branches:
-      - godot-3.x
+      - main
 
 jobs:
 
@@ -24,7 +24,7 @@ jobs:
       - name: Checkout GDCEF
         uses: actions/checkout@v4
         with:
-          ref: godot-3.x
+          ref: main
           submodules: true
       - name: Install system packages
         run: |
